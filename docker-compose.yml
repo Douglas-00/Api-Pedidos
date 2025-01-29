@@ -1,0 +1,38 @@
+version: '3.8'
+services:
+  # Serviço para o PostgreSQL
+  db:
+    image: postgres:16
+    container_name: order_db
+    environment:
+      POSTGRES_USER: root
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: order
+    ports:
+      - '5999:5432'
+    volumes:
+      - db-data:/var/lib/postgresql/data
+    networks:
+      - app-network
+
+  # Serviço para a aplicação Node.js
+  app:
+    build: .
+    container_name: order_app
+    ports:
+      - '3000:3000'
+    environment:
+      DATABASE_URL: '${DATABASE_URL}'
+    depends_on:
+      - db
+    volumes:
+      - .:/app
+    networks:
+      - app-network
+
+volumes:
+  db-data:
+
+networks:
+  app-network:
+    driver: bridge
