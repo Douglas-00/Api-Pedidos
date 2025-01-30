@@ -6,8 +6,6 @@ export class User {
   createdAt?: Date;
   updatedAt?: Date;
   deletedAt?: Date;
-  //   urls: Url[];
-  //   clickLogs: ClickLog[];
 
   constructor(id: number, name: string, email: string, password: string) {
     this.id = id;
@@ -16,7 +14,5 @@ export class User {
     this.password = password;
     this.createdAt = new Date();
     this.updatedAt = new Date();
-    // this.urls = [];
-    // this.clickLogs = [];
   }
 }
