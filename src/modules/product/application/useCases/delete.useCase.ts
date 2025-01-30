@@ -1,6 +1,7 @@
 import { BadRequestException, Inject, Injectable } from '@nestjs/common';
 import { ProductRepository } from '../domain/repositories/product.repository';
 import { AppLogger } from 'src/modules/logger/logger.service';
+import { DeleteProductResponseDto } from '../../infra/dto/delete/response.dto';
 
 @Injectable()
 export class DeleteProductUseCase {
@@ -10,7 +11,7 @@ export class DeleteProductUseCase {
     private readonly logger: AppLogger,
   ) {}
 
-  async execute(productId: number): Promise<any> {
+  async execute(productId: number): Promise<DeleteProductResponseDto> {
     const verifyProduct = await this.productRepository.findById(productId);
 
     if (!verifyProduct) {

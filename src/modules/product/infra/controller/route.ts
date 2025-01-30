@@ -1,1 +1,1 @@
-export const PRODUCT_RESOURCE = 'product';
+export const PRODUCT_RESOURCE = 'products';

@@ -21,20 +21,22 @@ export class PrismaProductRepository implements ProductRepository {
         description: true,
         price: true,
         stockQuantity: true,
+        createdAt: true,
+        updatedAt: true,
       },
     });
   }
 
   async update(id: number, product: Partial<Product>): Promise<Product> {
     return await this.prisma.product.update({
-      where: { id, deletedAt: null },
+      where: { id },
       data: product,
     });
   }
 
   async delete(id: number): Promise<any> {
     return await this.prisma.product.update({
-      where: { id, deletedAt: null },
+      where: { id },
       data: { deletedAt: new Date() },
     });
   }
@@ -49,6 +51,7 @@ export class PrismaProductRepository implements ProductRepository {
           category: true,
           price: true,
           stockQuantity: true,
+          createdAt: true,
         },
         orderBy: { createdAt: 'desc' },
       })) || []

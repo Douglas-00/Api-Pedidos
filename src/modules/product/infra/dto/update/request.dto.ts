@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsInt, IsString, MaxLength, Min } from 'class-validator';
+import { IsInt, IsNumber, IsString, MaxLength, Min } from 'class-validator';
 
 export class UpdateProductRequestDto {
   @ApiProperty({ description: 'Nome do produto', example: 'Notebook' })
@@ -19,7 +19,7 @@ export class UpdateProductRequestDto {
   description?: string;
 
   @ApiProperty({ description: 'Preço do produto em centavos', example: 500000 })
-  @IsInt()
+  @IsNumber()
   @Min(0)
   price?: number;
 

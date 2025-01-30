@@ -2,6 +2,8 @@ import { BadRequestException, Inject, Injectable } from '@nestjs/common';
 import { ProductRepository } from '../domain/repositories/product.repository';
 import { AppLogger } from 'src/modules/logger/logger.service';
 import { ProductMapper } from '../mappers/product.mapper';
+import { UpdateProductRequestDto } from '../../infra/dto/update/request.dto';
+import { UpdateProductResponseDto } from '../../infra/dto/update/response.dto';
 
 @Injectable()
 export class UpdateProductUseCase {
@@ -11,17 +13,21 @@ export class UpdateProductUseCase {
     private readonly logger: AppLogger,
   ) {}
 
-  async execute(productId: number, updateProductDto: any): Promise<any> {
+  async execute(
+    productId: number,
+    updateProductDto: UpdateProductRequestDto,
+  ): Promise<UpdateProductResponseDto> {
     const verifyProduct = await this.productRepository.findById(productId);
 
     if (!verifyProduct) {
       this.logger.warn('Product not found');
       throw new BadRequestException('Product not found');
     }
+    const product = await ProductMapper.toDomainUpdate(updateProductDto);
 
     const updatedProduct = await this.productRepository.update(
       productId,
-      updateProductDto,
+      product,
     );
     return ProductMapper.toUpdateResponseDto(updatedProduct);
   }
