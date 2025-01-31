@@ -10,6 +10,7 @@ import { DeleteProductController } from './infra/controller/delete.controller';
 import { UpdateProductController } from './infra/controller/update.controller';
 import { ShowProductController } from './infra/controller/show.controller';
 import { ListProductsController } from './infra/controller/list.controller';
+import { ValidateProductUseCase } from './application/useCases/validateProduct.useCase';
 
 @Module({
   providers: [
@@ -22,6 +23,7 @@ import { ListProductsController } from './infra/controller/list.controller';
     UpdateProductUseCase,
     ShowProductUseCase,
     ListProductUseCase,
+    ValidateProductUseCase,
   ],
   controllers: [
     CreateProductController,
@@ -30,6 +32,6 @@ import { ListProductsController } from './infra/controller/list.controller';
     ShowProductController,
     ListProductsController,
   ],
-  exports: [],
+  exports: [ValidateProductUseCase],
 })
 export class ProductModule {}

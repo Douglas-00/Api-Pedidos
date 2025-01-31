@@ -18,6 +18,7 @@ export class DeleteOrderUseCase {
 
   async execute(id: number, userId: number): Promise<DeleteOrderResponseDto> {
     const order = await this.orderRepository.findById(id, userId);
+    console.log(order);
 
     if (!order) {
       this.logger.warn('Order not found');

@@ -10,8 +10,10 @@ import { DeleteOrderController } from './infra/controller/delete.controller';
 import { UpdateOrderController } from './infra/controller/update.controller';
 import { ListOrdersController } from './infra/controller/list.controller';
 import { ShowOrderController } from './infra/controller/show.controller';
+import { ProductModule } from '../product/product.module';
 
 @Module({
+  imports: [ProductModule],
   providers: [
     {
       provide: 'OrderPrismaRepository',
