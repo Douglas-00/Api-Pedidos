@@ -1,26 +1,15 @@
-export class Order {
+import { OrderStatus } from '@prisma/client';
+
+export interface Order {
   id?: number;
   userId: number;
   totalAmount: number;
-  status?: string;
+  status: OrderStatus;
   createdAt?: Date;
   updatedAt?: Date;
   deletedAt?: Date;
-  products?: { productId: number; quantity: number }[];
-
-  constructor(
-    id: number,
-    userId: number,
-    totalAmount: number,
-    status: string,
-    products: { productId: number; quantity: number }[] = [],
-  ) {
-    this.id = id;
-    this.userId = userId;
-    this.totalAmount = totalAmount;
-    this.status = status;
-    this.products = products;
-    this.createdAt = new Date();
-    this.updatedAt = new Date();
-  }
+  products?: {
+    productId: number;
+    quantity: number;
+  }[];
 }

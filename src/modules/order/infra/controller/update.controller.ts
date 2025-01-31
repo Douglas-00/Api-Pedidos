@@ -1,9 +1,22 @@
-import { Body, Controller, Param, Put } from '@nestjs/common';
-import { ApiOperation, ApiTags } from '@nestjs/swagger';
+import {
+  Body,
+  Controller,
+  Param,
+  Put,
+  UsePipes,
+  UseGuards,
+  Req,
+} from '@nestjs/common';
+import { ApiOperation, ApiTags, ApiResponse } from '@nestjs/swagger';
 import { UpdateOrderUseCase } from '../../application/useCases/update.useCase';
 import { ORDER_RESOURCE } from './route';
-import { UpdateOrderRequestDto } from '../dto/update/request.dto';
+import {
+  UpdateOrderIdRequestDto,
+  UpdateOrderRequestDto,
+} from '../dto/update/request.dto';
 import { UpdateOrderResponseDto } from '../dto/update/response.dto';
+import { ValidationPipe } from '@nestjs/common';
+import { AuthGuard } from 'src/modules/auth/guard/auth.guard';
 
 @ApiTags('Orders')
 @Controller(ORDER_RESOURCE)
@@ -12,10 +25,18 @@ export class UpdateOrderController {
 
   @Put(':id')
   @ApiOperation({ summary: 'Update order details' })
+  @ApiResponse({ status: 200, description: 'Order updated successfully.' })
+  @ApiResponse({ status: 400, description: 'Invalid data provided.' })
+  @ApiResponse({ status: 404, description: 'Order not found.' })
+  @ApiResponse({ status: 401, description: 'Unauthorized.' })
+  @UsePipes(new ValidationPipe({ transform: true }))
+  @UseGuards(AuthGuard)
   async updateOrder(
-    @Param('id') id: number,
+    @Param() { id }: UpdateOrderIdRequestDto,
+    @Req() request: any,
     @Body() orderData: UpdateOrderRequestDto,
   ): Promise<UpdateOrderResponseDto> {
-    return await this.useCase.execute(id, orderData);
+    const userId = request.user?.sub;
+    return await this.useCase.execute(id, orderData, userId);
   }
 }

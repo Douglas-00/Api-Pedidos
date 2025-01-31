@@ -1,12 +1,18 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsInt, IsNotEmpty, Min } from 'class-validator';
+import {
+  IsArray,
+  IsInt,
+  IsNotEmpty,
+  Min,
+  ValidateNested,
+} from 'class-validator';
+
+interface Product {
+  productId: number;
+  quantity: number;
+}
 
 export class CreateOrderRequestDto {
-  @ApiProperty({ description: 'User ID for the order', example: 1 })
-  @IsInt()
-  @Min(1)
-  userId: number;
-
   @ApiProperty({
     description: 'Total amount of the order in cents',
     example: 15000,
@@ -20,5 +26,7 @@ export class CreateOrderRequestDto {
     example: [{ productId: 1, quantity: 2 }],
   })
   @IsNotEmpty()
-  products: { productId: number; quantity: number }[];
+  @IsArray()
+  @ValidateNested({ each: true })
+  products: Product[];
 }

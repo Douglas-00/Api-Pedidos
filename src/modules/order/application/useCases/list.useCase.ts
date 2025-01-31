@@ -12,9 +12,10 @@ export class ListOrdersUseCase {
     private readonly logger: AppLogger,
   ) {}
 
-  async execute(): Promise<ListOrdersResponseDto[]> {
-    this.logger.log('Fetching all orders');
-    const orders = await this.orderRepository.list();
+  async execute(userId: number): Promise<ListOrdersResponseDto[]> {
+    this.logger.log(`Fetching orders for user ${userId}`);
+
+    const orders = await this.orderRepository.list(userId);
     return orders.map(OrderMapper.toResponseDto);
   }
 }
