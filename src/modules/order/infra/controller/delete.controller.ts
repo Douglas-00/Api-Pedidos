@@ -1,4 +1,12 @@
-import { Controller, Delete, Param, Req, UseGuards } from '@nestjs/common';
+import {
+  Controller,
+  Delete,
+  Param,
+  Req,
+  UseGuards,
+  UsePipes,
+  ValidationPipe,
+} from '@nestjs/common';
 import { ApiOperation, ApiTags, ApiResponse } from '@nestjs/swagger';
 import { DeleteOrderUseCase } from '../../application/useCases/delete.useCase';
 import { ORDER_RESOURCE } from './route';
@@ -16,6 +24,7 @@ export class DeleteOrderController {
   @ApiResponse({ status: 200, description: 'Order deleted successfully.' })
   @ApiResponse({ status: 404, description: 'Order not found.' })
   @ApiResponse({ status: 401, description: 'Unauthorized.' })
+  @UsePipes(new ValidationPipe({ transform: true }))
   @UseGuards(AuthGuard)
   async deleteOrder(
     @Param() { id }: DeleteOrderIdRequestDto,

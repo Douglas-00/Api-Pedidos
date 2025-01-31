@@ -5,5 +5,13 @@ export class ListOrdersResponseDto {
   userId?: number;
   totalAmount?: number;
   status?: OrderStatus;
-  createdAt?: Date;
+  products?: {
+    product: {
+      id: number;
+      name: string;
+      description: string;
+      price: number;
+      stockQuantity: number;
+    };
+  }[];
 }

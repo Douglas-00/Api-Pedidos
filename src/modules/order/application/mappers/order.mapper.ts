@@ -14,10 +14,10 @@ export class OrderMapper {
   static toResponseDto(order: Partial<Order>): Partial<Order> {
     return {
       id: order.id,
-      userId: order?.userId,
+      userId: order.userId,
       totalAmount: order.totalAmount,
       status: order.status,
-      createdAt: order.createdAt,
+      products: order.products,
     };
   }
 }

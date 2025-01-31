@@ -18,15 +18,7 @@ export class CreateOrderUseCase {
   ): Promise<CreateOrderResponseDto> {
     const order = OrderMapper.toDomain(orderData, userId);
 
-    const createdOrder = await this.orderRepository.create(order);
-    console.log('pedido criar:', createdOrder);
-
-    // if (createdOrder.status === 'COMPLETED') {
-    //   await this.orderRepository.updateStockAfterOrderCompletion(
-    //     createdOrder.id,
-    //     userId,
-    //   );
-    // }
+    await this.orderRepository.create(order);
 
     return { id: order.id, message: 'Order created successfully' };
   }

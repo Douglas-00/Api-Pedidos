@@ -33,12 +33,42 @@ export class PrismaOrderRepository implements OrderRepository {
   }
 
   async findById(id: number, userId: number): Promise<Order | null> {
-    return await this.prisma.order.findUnique({
+    const order = await this.prisma.order.findUnique({
       where: { id, userId, deletedAt: null },
       include: {
-        products: true,
+        products: {
+          select: {
+            product: {
+              select: {
+                id: true,
+                name: true,
+                description: true,
+                price: true,
+                stockQuantity: true,
+              },
+            },
+          },
+        },
       },
     });
+
+    const transformedOrder = {
+      ...order,
+      products: order.products.map((orderProduct) => {
+        const product = orderProduct.product;
+
+        const formattedPrice = (product.price / 100)
+          .toFixed(2)
+          .replace('.', ',');
+
+        return {
+          ...product,
+          price: `R$ ${formattedPrice}`,
+        };
+      }),
+    };
+
+    return transformedOrder as any;
   }
 
   async update(
@@ -58,6 +88,10 @@ export class PrismaOrderRepository implements OrderRepository {
   }
 
   async delete(id: number, userId: number): Promise<string> {
+    await this.prisma.orderProduct.deleteMany({
+      where: { orderId: id },
+    });
+
     await this.prisma.order.update({
       where: { id, userId },
       data: { deletedAt: new Date() },
@@ -66,15 +100,46 @@ export class PrismaOrderRepository implements OrderRepository {
   }
 
   async list(userId: number): Promise<ListOrdersResponseDto[]> {
-    return await this.prisma.order.findMany({
+    const orders = await this.prisma.order.findMany({
       where: { userId, deletedAt: null },
       select: {
         id: true,
         userId: true,
         totalAmount: true,
         status: true,
-        createdAt: true,
+        products: {
+          select: {
+            product: {
+              select: {
+                id: true,
+                name: true,
+                description: true,
+                price: true,
+                stockQuantity: true,
+              },
+            },
+          },
+        },
       },
     });
+
+    return orders.map(
+      (order) =>
+        ({
+          ...order,
+          products: order.products.map((orderProduct) => {
+            const product = orderProduct.product;
+
+            const formattedPrice = (product.price / 100)
+              .toFixed(2)
+              .replace('.', ',');
+
+            return {
+              ...product,
+              price: `R$ ${formattedPrice}`,
+            };
+          }),
+        }) as any,
+    );
   }
 }
