@@ -3,6 +3,7 @@ import { UpdateProductUseCase } from './update.useCase';
 import { AppLogger } from 'src/modules/logger/logger.service';
 import { BadRequestException } from '@nestjs/common';
 import { ProductMapper } from '../mappers/product.mapper';
+import { PrismaService } from 'src/db/prisma.service';
 
 describe('UpdateProductUseCase', () => {
   let updateProductUseCase: UpdateProductUseCase;
@@ -15,6 +16,13 @@ describe('UpdateProductUseCase', () => {
 
   const mockLogger = {
     warn: jest.fn(),
+    error: jest.fn(),
+  };
+
+  const mockPrismaService = {
+    $transaction: jest.fn(async (callback) => {
+      return callback();
+    }),
   };
 
   beforeEach(async () => {
@@ -28,6 +36,10 @@ describe('UpdateProductUseCase', () => {
         {
           provide: AppLogger,
           useValue: mockLogger,
+        },
+        {
+          provide: PrismaService,
+          useValue: mockPrismaService,
         },
       ],
     }).compile();
@@ -63,6 +75,7 @@ describe('UpdateProductUseCase', () => {
       productId,
       product,
     );
+    expect(mockPrismaService.$transaction).toHaveBeenCalled();
   });
 
   it('should throw BadRequestException when product not found', async () => {

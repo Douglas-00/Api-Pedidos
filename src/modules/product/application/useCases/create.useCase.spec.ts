@@ -2,12 +2,19 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { CreateProductUseCase } from './create.useCase';
 import { ProductMapper } from '../mappers/product.mapper';
 import { CreateProductRequestDto } from '../../infra/dto/create/request.dto';
+import { PrismaService } from 'src/db/prisma.service';
 
 describe('CreateProductUseCase', () => {
   let createProductUseCase: CreateProductUseCase;
 
   const mockProductRepository = {
     create: jest.fn(),
+  };
+
+  const mockPrismaService = {
+    $transaction: jest.fn(async (callback) => {
+      return callback();
+    }),
   };
 
   beforeEach(async () => {
@@ -17,6 +24,10 @@ describe('CreateProductUseCase', () => {
         {
           provide: 'ProductPrismaRepository',
           useValue: mockProductRepository,
+        },
+        {
+          provide: PrismaService,
+          useValue: mockPrismaService,
         },
       ],
     }).compile();
@@ -46,5 +57,6 @@ describe('CreateProductUseCase', () => {
       message: 'Product created successfully',
     });
     expect(mockProductRepository.create).toHaveBeenCalledWith(newProduct);
+    expect(mockPrismaService.$transaction).toHaveBeenCalled();
   });
 });
