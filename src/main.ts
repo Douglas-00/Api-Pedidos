@@ -7,14 +7,14 @@ async function bootstrap() {
 
   //Config Swagger
   const config = new DocumentBuilder()
-    .setTitle('API PEDIDOS')
-    .setDescription('APi de pedidos')
+    .setTitle('API de Pedidos')
+    .setDescription('Documentação da API de Pedidos')
     .setVersion('1.0')
     .build();
 
   const document = SwaggerModule.createDocument(app, config);
 
-  SwaggerModule.setup('api', app, document);
+  SwaggerModule.setup('api/pedidos', app, document);
 
   await app.listen(3000);
 }

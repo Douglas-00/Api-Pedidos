@@ -5,6 +5,8 @@ import { UserModule } from './modules/user/user.module';
 import { LoggerModule } from './modules/logger/logger.module';
 import { AuthModule } from './modules/auth/auth.module';
 import { RequestLoggerMiddleware } from './shared/middleware/request.logger.middleware';
+import { ProductModule } from './modules/product/product.module';
+import { OrderModule } from './modules/order/order.module';
 
 @Module({
   imports: [
@@ -13,6 +15,8 @@ import { RequestLoggerMiddleware } from './shared/middleware/request.logger.midd
     LoggerModule,
     UserModule,
     AuthModule,
+    ProductModule,
+    OrderModule,
   ],
   controllers: [],
   providers: [],

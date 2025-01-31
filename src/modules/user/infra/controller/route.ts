@@ -1,1 +1,1 @@
-export const USER_RESOURCE = 'user';
+export const USER_RESOURCE = 'users';
