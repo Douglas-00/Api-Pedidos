@@ -9,6 +9,7 @@ import { PRODUCT_RESOURCE } from './route';
 import { DeleteProductResponseDto } from '../dto/delete/response.dto';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { DeleteProductUseCase } from '../../application/useCases/delete.useCase';
+import { DeleteProductIdRequestDto } from '../dto/delete/request.dto';
 
 @ApiTags('Products')
 @Controller(PRODUCT_RESOURCE)
@@ -23,7 +24,7 @@ export class DeleteProductController {
   @ApiResponse({ status: 200, description: 'Product deleted successfully.' })
   @UsePipes(new ValidationPipe({ transform: true }))
   async deleteProduct(
-    @Param('id') id: number,
+    @Param() { id }: DeleteProductIdRequestDto,
   ): Promise<DeleteProductResponseDto> {
     return await this.useCase.execute(id);
   }

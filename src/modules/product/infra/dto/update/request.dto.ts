@@ -1,5 +1,13 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsInt, IsNumber, IsString, MaxLength, Min } from 'class-validator';
+import { Type } from 'class-transformer';
+import {
+  IsInt,
+  IsNumber,
+  IsPositive,
+  IsString,
+  MaxLength,
+  Min,
+} from 'class-validator';
 
 export class UpdateProductRequestDto {
   @ApiProperty({ description: 'Nome do produto', example: 'Notebook' })
@@ -27,4 +35,12 @@ export class UpdateProductRequestDto {
   @IsInt()
   @Min(0)
   stockQuantity?: number;
+}
+
+export class UpdateProductIdRequestDto {
+  @ApiProperty({ description: 'Id do produto', example: 1 })
+  @IsInt()
+  @IsPositive()
+  @Type(() => Number)
+  id: number;
 }

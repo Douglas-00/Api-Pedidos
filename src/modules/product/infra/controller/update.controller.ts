@@ -7,7 +7,10 @@ import {
   ValidationPipe,
 } from '@nestjs/common';
 
-import { UpdateProductRequestDto } from '../dto/update/request.dto';
+import {
+  UpdateProductIdRequestDto,
+  UpdateProductRequestDto,
+} from '../dto/update/request.dto';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { PRODUCT_RESOURCE } from './route';
 import { UpdateProductUseCase } from '../../application/useCases/update.useCase';
@@ -27,7 +30,7 @@ export class UpdateProductController {
   @ApiResponse({ status: 404, description: 'Product not found.' })
   @UsePipes(new ValidationPipe({ transform: true }))
   async updateProduct(
-    @Param('id') id: number,
+    @Param() { id }: UpdateProductIdRequestDto,
     @Body() updateProductDto: UpdateProductRequestDto,
   ): Promise<UpdateProductResponseDto> {
     return await this.useCase.execute(id, updateProductDto);
